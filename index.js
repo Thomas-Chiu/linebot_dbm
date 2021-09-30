@@ -1,7 +1,9 @@
-import linebot from "linebot";
-import dotenv from "dotenv";
+const linebot = require("linebot");
+const dotenv = require("dotenv");
+const googleSheet = require("./googleSheet.js");
 
 dotenv.config();
+googleSheet.getData("1oDl5zEGq_MWOP203AgfBQsBSTd4TrFU_yyhn2-PsnQM", 0);
 
 const bot = linebot({
   channelId: process.env.CHANNEL_ID,

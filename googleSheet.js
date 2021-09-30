@@ -1,27 +1,39 @@
-import GoogleSpreadsheet from "google-spreadsheet";
-import credentials from "./credentials.json";
+const { GoogleSpreadsheet } = require("google-spreadsheet");
+const creds = require("./credential.json");
 
 /*
-  @param  {String} docID the document ID
-  @param  {String} sheetID the google sheet table ID
-  @param  {String} credentialsPath the credentials path defalt is './credentials.json'
+Sheet 的 docID 和 sheetID 請參照以下網址規則：
+https://docs.google.com/spreadsheets/d/<docID>/edit#gid=<sheetID>
 */
 
-async function getData(docID, sheetID) {
-  const doc = new GoogleSpreadsheet(docID);
-  const creds = credentials;
-  const sheet = doc.sheetsById[sheetID];
-  const rows = await sheet.getRows();
-  const result = [];
-  m;
-
+const getData = async () => {
+  const doc = new GoogleSpreadsheet(
+    "1oDl5zEGq_MWOP203AgfBQsBSTd4TrFU_yyhn2-PsnQM"
+  );
   await doc.useServiceAccountAuth(creds);
+
+  // loads document properties and worksheets
   await doc.loadInfo();
-  for (row of rows) {
-    result.push(row._rawData);
-  }
-  return result;
-}
+  console.log(doc.title);
+
+  // or use doc.sheetsById[id] or doc.sheetsByTitle[title]
+  const sheet = doc.sheetsByIndex[0];
+  console.log(sheet.title);
+  console.log(sheet.rowCount);
+
+  // can pass in { limit, offset
+  const rows = await sheet.getRows();
+  console.log(rows);
+
+  // append rows
+  const larryRow = await sheet.addRow({
+    日期: 456,
+    姓名: "Thomas",
+    品項: "雞腿飯",
+    金額: 80,
+    備註: "",
+  });
+};
 
 module.exports = {
   getData,
