@@ -1,6 +1,6 @@
 const getDate = require("./getDate.js");
 
-const controller = async (action) => {
+const controller = async (action, data) => {
   /* https://docs.google.com/spreadsheets/d/<docID>/edit#gid=<sheetID> */
   const { GoogleSpreadsheet } = require("google-spreadsheet");
   const creds = require("../credential.json");
@@ -17,12 +17,13 @@ const controller = async (action) => {
     console.log(await sheet.getRows());
   }
   if (action === "add") {
+    await doc.updateProperties({ title: getDate.getDate() });
     await sheet.addRow({
       日期: getDate.getDate(),
-      姓名: "Thomas",
-      品項: "雞腿飯",
-      金額: 80,
-      備註: "",
+      姓名: data.name,
+      品項: data.item,
+      金額: data.price,
+      備註: data.note,
     });
   }
 };

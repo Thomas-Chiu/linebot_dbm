@@ -14,15 +14,30 @@ const bot = linebot({
 bot.on("message", (event) => {
   // event.message.text 為使用者傳送的文字
   let text = event.message.text;
-  let 
+  let textArr = text.split(" ");
+  let order = {
+    name: "",
+    item: "",
+    price: "",
+    note: "",
+  };
   // event.reply 為回覆訊息
-  if (text.split().indexOf("$nbsp") === -1) {
-    event.reply(`請按以下格式填寫喔 😋\n王小明 雞腿飯 80 (飯少)`);
-    return;
-  }
+  if (textArr.length >= 3) {
+    // 檢查有無備註
+    let tempNote;
+    textArr[3].includes("(") || textArr[3].includes(")")
+      ? (tempNote = textArr[3])
+      : (tempNote = "");
 
-  console.log(text.split(" "));
-  // init.controller("add");
+    order.name = textArr[0];
+    order.item = textArr[1];
+    order.price = textArr[2];
+    order.note = tempNote;
+    init.controller("add", order);
+    event.reply(`點餐成功\n${textArr.join(", ")}`);
+  } else {
+    event.reply(`點餐請用空格分開喔 😋\n王小明 雞腿飯 80 (飯少)`);
+  }
 });
 
 bot.listen("/", process.env.PORT, () => {
