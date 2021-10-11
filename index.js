@@ -1,9 +1,8 @@
 const linebot = require("linebot");
 const dotenv = require("dotenv");
-const googleSheet = require("./googleSheet.js");
+const init = require("./model/init.js");
 
 dotenv.config();
-googleSheet.getData();
 
 const bot = linebot({
   channelId: process.env.CHANNEL_ID,
@@ -11,12 +10,19 @@ const bot = linebot({
   channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
 });
 
-// 當收到訊息時，event 包含了訊息的類型、文字等
+// event 包含了收到訊息時的類型、文字等
 bot.on("message", (event) => {
   // event.message.text 為使用者傳送的文字
   let text = event.message.text;
-  if (text.split().indexOf(text) !== -1) event.reply(event.message.text);
+  let 
   // event.reply 為回覆訊息
+  if (text.split().indexOf("$nbsp") === -1) {
+    event.reply(`請按以下格式填寫喔 😋\n王小明 雞腿飯 80 (飯少)`);
+    return;
+  }
+
+  console.log(text.split(" "));
+  // init.controller("add");
 });
 
 bot.listen("/", process.env.PORT, () => {
