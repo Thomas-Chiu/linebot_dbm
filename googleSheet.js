@@ -21,13 +21,13 @@ const getData = async () => {
   console.log(sheet.title);
   console.log(sheet.rowCount);
 
-  // can pass in { limit, offset
+  // can pass in { limit, offset }
   const rows = await sheet.getRows();
   console.log(rows);
 
   // append rows
   const larryRow = await sheet.addRow({
-    日期: 456,
+    日期: new Date(),
     姓名: "Thomas",
     品項: "雞腿飯",
     金額: 80,

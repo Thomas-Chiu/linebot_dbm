@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 const googleSheet = require("./googleSheet.js");
 
 dotenv.config();
-googleSheet.getData("1oDl5zEGq_MWOP203AgfBQsBSTd4TrFU_yyhn2-PsnQM", 0);
+googleSheet.getData();
 
 const bot = linebot({
   channelId: process.env.CHANNEL_ID,
