@@ -1,4 +1,5 @@
 const getDate = require("./getDate.js");
+const today = getDate.getDate();
 let resultArr = [];
 
 const controller = async (action, data) => {
@@ -15,17 +16,18 @@ const controller = async (action, data) => {
   await doc.updateProperties({ title: "linebot_dbm" });
 
   // 載入工作表
-  const sheet = await doc.sheetsByIndex[0];
-
+  let sheet = await doc.sheetsByIndex[0];
   /* 載入資料列
    getRows() 可傳入參數 { limit, offset } */
-  const rows = await sheet.getRows();
+  let rows = await sheet.getRows();
 
   // CRUD
   if (action === "read") {
     resultArr = [];
     for (let item of rows) {
-      item.note === undefined ? (item.note = "") : (item.note = item.note);
+      // 讀取當天資料
+      if (item.date !== today) continue;
+      if (item.note === undefined) item.note = "";
       resultArr.push({
         date: item.date,
         name: item.name,
@@ -37,8 +39,16 @@ const controller = async (action, data) => {
     }
   }
   if (action === "add") {
-    data["date"] = getDate.getDate();
+    data["date"] = today;
     await sheet.addRow(data);
+  }
+  if (action === "delete") {
+    // 刪除工作表
+    await doc.addSheet({
+      headerValues: ["date", "name", "item", "price", "note"],
+    });
+    await sheet.delete();
+    console.log("DELETE SHEET");
   }
 };
 

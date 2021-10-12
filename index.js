@@ -14,10 +14,11 @@ bot.on("message", async (event) => {
   let text = event.message.text;
   let textArr = text.split(" ");
   let order = { name: "", item: "", price: "", note: "" };
+  let message = "";
+
   // 點餐 --------------------------------------------------
   if (textArr.length >= 3) {
     let tempNote;
-    let message = "";
     // 檢查有無備註
     text.includes("(") || text.includes(")")
       ? (tempNote = true)
@@ -35,20 +36,30 @@ bot.on("message", async (event) => {
     await init.controller("add", order);
     await event.reply(message);
   }
+
   // 結單 -------------------------------------------------
   if (text.includes("結單")) {
+    let count = 0;
     let result = [];
-    let message = "";
     // await 處理非同步問題
     await init.controller("read");
     result = await init.result();
 
     for (let item of result) {
-      message += `${item.name}: ${item.item} $${item.price} ${item.note} \n`;
+      count++;
+      message += `${count}. ${item.name}: ${item.item} $${item.price} ${item.note} \n`;
     }
-    await event.reply(`${result[0].date}\n${message}\n以上結單 🍱`);
+    await event.reply(`${result[0].date}\n\n${message}\n以上結單 🍱`);
+  }
+
+  // 棄單 -------------------------------------------------
+  if (text.includes("棄單")) {
+    message = `棄單成功，請重新點餐 👍`;
+    await init.controller("delete");
+    await event.reply(message);
   } else {
-    event.reply(`點餐請用空格分開喔 😋\n王小明 雞腿飯 80 (飯少)`);
+    message = `點餐請用空格分開喔 😋\n王小明 雞腿飯 80 (飯少)`;
+    event.reply(message);
   }
 });
 
