@@ -48,7 +48,6 @@ const controller = async (action, data) => {
       headerValues: ["date", "name", "item", "price", "note"],
     });
     await sheet.delete();
-    console.log("DELETE SHEET");
   }
 };
 

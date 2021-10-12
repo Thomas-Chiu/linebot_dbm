@@ -7,6 +7,7 @@ const bot = linebot({
   channelSecret: process.env.CHANNEL_SECRET,
   channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
 });
+let turnOn = false;
 
 // event 包含了收到訊息時的類型、文字等
 bot.on("message", async (event) => {
@@ -16,8 +17,21 @@ bot.on("message", async (event) => {
   let order = { name: "", item: "", price: "", note: "" };
   let message = "";
 
-  // 點餐 --------------------------------------------------
+  if (text.includes("訂便當")) {
+    turnOn = true;
+    message = `啟動訂便當小幫手`;
+    await event.reply(message);
+  }
+
+  console.log(turnOn);
+
+  if (turnOn !== true) {
+    console.log("return");
+    return;
+  }
+  // else{
   if (textArr.length >= 3) {
+    // 點餐 --------------------------------------------------
     let tempNote;
     // 檢查有無備註
     text.includes("(") || text.includes(")")
@@ -40,6 +54,7 @@ bot.on("message", async (event) => {
   // 結單 -------------------------------------------------
   if (text.includes("結單")) {
     let count = 0;
+    let totalPrice = 0;
     let result = [];
     // await 處理非同步問題
     await init.controller("read");
@@ -47,9 +62,15 @@ bot.on("message", async (event) => {
 
     for (let item of result) {
       count++;
+      totalPrice += parseInt(item.price);
       message += `${count}. ${item.name}: ${item.item} $${item.price} ${item.note} \n`;
     }
-    await event.reply(`${result[0].date}\n\n${message}\n以上結單 🍱`);
+
+    result.length !== 0
+      ? (message = `${result[0].date}\n\n${message}\n以上結單 🍱 共 ${totalPrice} 元`)
+      : (message = `今天還沒有任何點餐喔 😮`);
+    await event.reply(message);
+    turnOn = false;
   }
 
   // 棄單 -------------------------------------------------
@@ -57,10 +78,11 @@ bot.on("message", async (event) => {
     message = `棄單成功，請重新點餐 👍`;
     await init.controller("delete");
     await event.reply(message);
-  } else {
-    message = `點餐請用空格分開喔 😋\n王小明 雞腿飯 80 (飯少)`;
-    event.reply(message);
   }
+
+  message = `點餐請用空格分開喔 😋\n王小明 雞腿飯 80 (飯少)`;
+  event.reply(message);
+  // }
 });
 
 bot.listen("/", process.env.PORT, () => {
