@@ -17,11 +17,15 @@ bot.on("message", async (event) => {
   // 點餐 --------------------------------------------------
   if (textArr.length >= 3) {
     let tempNote;
-    let message = `點餐成功\n${textArr.join(", ")}`;
+    let message = "";
     // 檢查有無備註
-    textArr[3].includes("(") || textArr[3].includes(")")
-      ? (tempNote = textArr[3])
+    text.includes("(") || text.includes(")")
+      ? (tempNote = true)
       : (tempNote = "");
+    tempNote && textArr.length > 3 ? (tempNote = textArr[3]) : (tempNote = "");
+    tempNote !== ""
+      ? (message = `點餐成功\n${textArr.join(", ")}`)
+      : (message = `點餐成功\n${textArr[0]}, ${textArr[1]}, ${textArr[2]}`);
 
     order.name = textArr[0];
     order.item = textArr[1];
