@@ -5,13 +5,13 @@ let resultArr = [];
 const controller = async (action, data) => {
   /* https://docs.google.com/spreadsheets/d/<docID>/edit#gid=<sheetID> */
   const { GoogleSpreadsheet } = require("google-spreadsheet");
-  // const creds = require("../credential.json");
+  const creds = require("../creds.json");
   const doc = new GoogleSpreadsheet(
     "1oDl5zEGq_MWOP203AgfBQsBSTd4TrFU_yyhn2-PsnQM"
   );
 
   // 載入文件
-  // await doc.useServiceAccountAuth(creds);
+  await doc.useServiceAccountAuth(creds);
   await doc.useServiceAccountAuth({
     client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
     private_key: process.env.GOOGLE_PRIVATE_KEY,

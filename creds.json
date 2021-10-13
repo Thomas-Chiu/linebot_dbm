@@ -1,0 +1,10 @@
+{
+  "type": "service_account",
+  "project_id": "linebot-dbm",
+  "private_key_id": "d9a43a91640f0b452ba564551d4740319b3c258e",
+  "client_id": "102345487270709564620",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/id-540%40linebot-dbm.iam.gserviceaccount.com"
+}
