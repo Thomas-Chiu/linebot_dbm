@@ -19,19 +19,15 @@ bot.on("message", async (event) => {
 
   if (text.includes("訂便當")) {
     turnOn = true;
-    message = `啟動訂便當小幫手`;
+    message = `啟動訂便當小幫手 👋\n\n點餐請用空格分開\n金額不用加 $ 字號\n備註請打在 () 裡面\n如：王小明 雞腿飯 80 (飯少)`;
     await event.reply(message);
   }
 
-  console.log(turnOn);
+  // console.log(`turnOn: ${turnOn}`);
+  if (turnOn !== true) return;
 
-  if (turnOn !== true) {
-    console.log("return");
-    return;
-  }
-  // else{
-  if (textArr.length >= 3) {
-    // 點餐 --------------------------------------------------
+  // 點餐 --------------------------------------------------
+  if (textArr.length >= 3 && !isNaN(textArr[2])) {
     let tempNote;
     // 檢查有無備註
     text.includes("(") || text.includes(")")
@@ -39,13 +35,14 @@ bot.on("message", async (event) => {
       : (tempNote = "");
     tempNote && textArr.length > 3 ? (tempNote = textArr[3]) : (tempNote = "");
     tempNote !== ""
-      ? (message = `點餐成功\n${textArr.join(", ")}`)
-      : (message = `點餐成功\n${textArr[0]}, ${textArr[1]}, ${textArr[2]}`);
+      ? (message = `點餐成功 👌\n${textArr.join(", ")}`)
+      : (message = `點餐成功 👌\n${textArr[0]}, ${textArr[1]}, ${textArr[2]}`);
 
     order.name = textArr[0];
     order.item = textArr[1];
     order.price = textArr[2];
     order.note = tempNote;
+    // console.log(order);
 
     await init.controller("add", order);
     await event.reply(message);
@@ -67,22 +64,22 @@ bot.on("message", async (event) => {
     }
 
     result.length !== 0
-      ? (message = `${result[0].date}\n\n${message}\n以上結單 🍱 共 ${totalPrice} 元`)
-      : (message = `今天還沒有任何點餐喔 😮`);
+      ? (message = `${result[0].date}\n\n${message}\n以上結單 🍱 共 ${totalPrice} 元\n輸入「訂便當」重新啟動小幫手`)
+      : (message = `今天還沒有任何點餐 😮`);
     await event.reply(message);
     turnOn = false;
   }
 
   // 棄單 -------------------------------------------------
   if (text.includes("棄單")) {
-    message = `棄單成功，請重新點餐 👍`;
+    message = `已刪除今日訂單 👍\n輸入「訂便當」重新啟動小幫手`;
     await init.controller("delete");
     await event.reply(message);
+    turnOn = false;
   }
 
-  message = `點餐請用空格分開喔 😋\n王小明 雞腿飯 80 (飯少)`;
+  message = `點餐請用空格分開 😋\n金額不用加 $ 字號\n備註請打在 () 裡面\n如：王小明 雞腿飯 80 (飯少)`;
   event.reply(message);
-  // }
 });
 
 bot.listen("/", process.env.PORT, () => {
