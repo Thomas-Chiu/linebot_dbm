@@ -5,7 +5,7 @@ let resultArr = [];
 const controller = async (action, data) => {
   /* https://docs.google.com/spreadsheets/d/<docID>/edit#gid=<sheetID> */
   const { GoogleSpreadsheet } = require("google-spreadsheet");
-  const creds = require("../credential.json");
+  // const creds = require("../credential.json");
   const doc = new GoogleSpreadsheet(
     "1oDl5zEGq_MWOP203AgfBQsBSTd4TrFU_yyhn2-PsnQM"
   );
