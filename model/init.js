@@ -11,7 +11,11 @@ const controller = async (action, data) => {
   );
 
   // 載入文件
-  await doc.useServiceAccountAuth(creds);
+  // await doc.useServiceAccountAuth(creds);
+  await doc.useServiceAccountAuth({
+    client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+    private_key: process.env.GOOGLE_PRIVATE_KEY,
+  });
   await doc.loadInfo();
   await doc.updateProperties({ title: "linebot_dbm" });
 
