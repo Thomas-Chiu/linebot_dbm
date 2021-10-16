@@ -5,25 +5,25 @@ let resultArr = [];
 const controller = async (action, data) => {
   /* https://docs.google.com/spreadsheets/d/<docID>/edit#gid=<sheetID> */
   const { GoogleSpreadsheet } = require("google-spreadsheet");
-  // const creds = require("../credential.json");
+  const creds = require("../credential.json");
   const doc = new GoogleSpreadsheet(
     "1oDl5zEGq_MWOP203AgfBQsBSTd4TrFU_yyhn2-PsnQM"
   );
 
   // 載入文件
-  // await doc.useServiceAccountAuth(creds);
-  await doc.useServiceAccountAuth({
-    type: process.env.TYPE,
-    project_id: process.env.PROJECT_ID,
-    private_key_id: process.env.PRIVATE_KEY_ID,
-    private_key: process.env.PRIVATE_KEY,
-    client_email: process.env.CLIENT_EMAIL,
-    client_id: process.env.CLIENT_ID,
-    auth_uri: process.env.AUTH_URI,
-    token_uri: process.env.TOKEN_URI,
-    auth_provider_x509_cert_url: process.env.AUTH_PROVIDER_X509_CERT_URL,
-    client_x509_cert_url: process.env.CLIENT_X509_CERT_URL,
-  });
+  await doc.useServiceAccountAuth(creds);
+  // await doc.useServiceAccountAuth({
+  //   type: process.env.TYPE,
+  //   project_id: process.env.PROJECT_ID,
+  //   private_key_id: process.env.PRIVATE_KEY_ID,
+  //   private_key: process.env.PRIVATE_KEY,
+  //   client_email: process.env.CLIENT_EMAIL,
+  //   client_id: process.env.CLIENT_ID,
+  //   auth_uri: process.env.AUTH_URI,
+  //   token_uri: process.env.TOKEN_URI,
+  //   auth_provider_x509_cert_url: process.env.AUTH_PROVIDER_X509_CERT_URL,
+  //   client_x509_cert_url: process.env.CLIENT_X509_CERT_URL,
+  // });
   await doc.loadInfo();
   await doc.updateProperties({ title: "linebot_dbm" });
 
