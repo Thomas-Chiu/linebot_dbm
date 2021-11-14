@@ -41,30 +41,18 @@ const controller = async (action, data) => {
 
   // CRUD
   if (action === "read") {
-    let previousItemNameArr = [];
-    let count = 0;
     resultArr = [];
+
     for (let item of rows) {
       // 讀取當天資料
       if (item.date !== today) continue;
       if (item.note === undefined) item.note = "";
-
       // 檢查是否重複點餐
-      for (let j of previousItemNameArr) {
-        if (item.name == j.name) {
-          // console.log(item.name, j.name, j.index);
-          console.log(resultArr[j.index]);
-          resultArr.splice(j.index, 1);
+      resultArr.forEach((value, index) => {
+        if (item.name == value.name) {
+          resultArr.splice(index, 1);
+          // console.log(index, value.name, item.name);
         }
-      }
-
-      // if (item.name === previousItemName) {
-      //   resultArr.pop();
-      //   console.log(resultArr.length);
-      // }
-      previousItemNameArr.push({
-        index: count,
-        name: item.name,
       });
 
       resultArr.push({
@@ -75,7 +63,6 @@ const controller = async (action, data) => {
         note: item.note,
         rawData: item._rawData,
       });
-      count++;
     }
   }
   if (action === "add") {

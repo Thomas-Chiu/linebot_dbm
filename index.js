@@ -17,8 +17,14 @@ bot.on("message", async (event) => {
   let message = "";
   let oneSpace = true;
 
+  // console.log(
+  //   parseInt(textArr[2]),
+  //   isNaN(parseInt(textArr[2])),
+  //   isNaN(textArr[2])
+  // );
+
   textArr.forEach(async (value, index, array) => {
-    if (value === "" || array.length > 4) oneSpace = false;
+    if (value === "" || isNaN(array[2]) || array.length > 4) oneSpace = false;
   });
 
   if (text.includes("訂便當") || text.includes("定便當")) {
@@ -32,11 +38,11 @@ bot.on("message", async (event) => {
   if (turnOn !== true || text.includes("不訂") || text.includes("不定")) return;
 
   // 點餐 --------------------------------------------------
-  if (textArr.length >= 3 && !isNaN(textArr[2])) {
+  if (textArr.length >= 3) {
     let tempNote;
-    // 檢查空格 or 長度
+    // 檢查空格 or 金額 or 長度
     if (!oneSpace) {
-      message = `格式有誤，點餐只需用一格空格分開 🧐`;
+      message = `格式有誤 🧐 點餐只需用一格空格分開`;
       await event.reply(message);
       return;
     }
