@@ -11,32 +11,54 @@ let turnOn = false;
 
 // event 包含了收到訊息時的類型、文字等
 bot.on("message", async (event) => {
-  // event.message.text 為使用者傳送的文字
   let text = event.message.text;
   let textArr = text.split(" ");
   let order = { name: "", item: "", price: "", note: "" };
   let message = "";
+  let oneSpace = true;
 
-  if (text.includes("訂便當")) {
+  textArr.forEach(async (value, index, array) => {
+    if (value === "" || array.length > 4) oneSpace = false;
+  });
+
+  if (text.includes("訂便當") || text.includes("定便當")) {
     turnOn = true;
     message = `啟動訂便當小幫手 👋\n\n點餐請用空格分開\n金額不用加 $ 字號\n備註請打在 () 裡面\n如：王小明 雞腿飯 80 (飯少)`;
     await event.reply(message);
   }
-
   // console.log(`turnOn: ${turnOn}`);
-  if (turnOn !== true) return;
+
+  // 未啟動 or 不訂餐
+  if (turnOn !== true || text.includes("不訂") || text.includes("不定")) return;
 
   // 點餐 --------------------------------------------------
   if (textArr.length >= 3 && !isNaN(textArr[2])) {
     let tempNote;
-    // 檢查有無備註
-    text.includes("(") || text.includes(")")
+    // 檢查空格 or 長度
+    if (!oneSpace) {
+      message = `格式有誤，點餐只需用一格空格分開 🧐`;
+      await event.reply(message);
+      return;
+    }
+    // 檢查有無備註，修正全形括號
+    text.includes("(") ||
+    text.includes(")") ||
+    text.includes("（") ||
+    text.includes("）")
       ? (tempNote = true)
       : (tempNote = "");
     tempNote && textArr.length > 3 ? (tempNote = textArr[3]) : (tempNote = "");
     tempNote !== ""
       ? (message = `點餐成功 👌\n${textArr.join(", ")}`)
       : (message = `點餐成功 👌\n${textArr[0]}, ${textArr[1]}, ${textArr[2]}`);
+    // 整理全形括號
+    if (tempNote.includes("（") || tempNote.includes("）")) {
+      let tempNoteRearrange = tempNote.split("");
+      tempNoteRearrange.shift();
+      tempNoteRearrange.pop();
+      tempNote = `(${tempNoteRearrange.join("")})`;
+      message = `點餐成功 👌\n${textArr[0]}, ${textArr[1]}, ${textArr[2]}, ${tempNote}`;
+    }
 
     order.name = textArr[0];
     order.item = textArr[1];
@@ -79,7 +101,7 @@ bot.on("message", async (event) => {
   }
 
   message = `點餐請用空格分開 😋\n金額不用加 $ 字號\n備註請打在 () 裡面\n如：王小明 雞腿飯 80 (飯少)`;
-  event.reply(message);
+  await event.reply(message);
 });
 
 bot.listen("/", process.env.PORT, () => {
