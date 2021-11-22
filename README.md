@@ -15,7 +15,7 @@
 
 ## v1.0.1
 
-###Bug Fixes
+### Bug Fixes
 
 - 修正 Heroku 雲端時間 (UTC+8)
 - 支援全形括號
