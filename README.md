@@ -4,6 +4,8 @@
 
 ![](https://i.imgur.com/AtzuuRq.png)
 
+### [DEMO](https://www.youtube.com/watch?v=Z3ruSTqpgn0)
+
 ## v1.0.0
 
 ### Features
