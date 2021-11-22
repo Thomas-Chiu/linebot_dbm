@@ -17,12 +17,6 @@ bot.on("message", async (event) => {
   let message = "";
   let oneSpace = true;
 
-  // console.log(
-  //   parseInt(textArr[2]),
-  //   isNaN(parseInt(textArr[2])),
-  //   isNaN(textArr[2])
-  // );
-
   textArr.forEach(async (value, index, array) => {
     if (value === "" || isNaN(array[2]) || array.length > 4) oneSpace = false;
   });
